@@ -1,0 +1,33 @@
+@import url('http://fonts.cdnfonts.com/css/pokemon-solid');
+
+mat-list-item {
+    cursor: pointer;
+  padding: 10px 30px;
+  box-shadow: rgb(133, 133, 133) 4px 4px 20px;
+  
+}
+mat-list-item:hover {
+    
+  //padding: 10px 30px;
+  box-shadow: rgb(137, 33, 185) 4px 4px 20px;
+  color: rgba(131, 131, 131, 0.055);
+}
+
+
+h1 {
+    font-family: 'Pokemon Solid', sans-serif;
+    font-size: 300%;
+    color: rgb(223, 219, 2);
+}
+#title {
+    margin-left: auto;
+    margin-right: auto;
+    width: 6em;
+    padding: 2em;
+}
+p {
+    color:rgb(105, 105, 105);
+}
+
+
+        

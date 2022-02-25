@@ -1,0 +1,31 @@
+<mat-card>
+    <mat-card-content>
+      <mat-grid-list cols="2" rowHeight="300px">
+        <mat-grid-tile  rowspan="1" colspan="1">
+          <img  mat-card-xl-image src="/assets/img/official-artwork/{{dataPokemon?.id}}.png">
+          <p>No. {{dataPokemon?.id | number:"3.0-0"}}</p>
+        </mat-grid-tile>
+        <mat-grid-tile rowspan="1" colspan="1">
+          <mat-list>
+            <mat-list-item>{{dataPokemon?.name}}
+              <audio autoplay src="/assets/audio/{{dataPokemon?.id}}.mp3"></audio>
+              <button mat-icon-button color="accent" (click)="playSound(dataPokemon?.id)">
+                <mat-icon>replay</mat-icon>
+              </button>
+            </mat-list-item>
+            <mat-list-item>
+              <mat-chip-list>
+                <mat-chip *ngFor="let type of dataPokemon?.types">{{type}}</mat-chip>
+              </mat-chip-list>
+            </mat-list-item>
+            <mat-list-item>Taille: {{dataPokemon?.height | number:"1.1-1" }}m</mat-list-item>
+            <mat-list-item>Poids: {{dataPokemon?.weight | number:"1.1-1"}}kg</mat-list-item>
+          </mat-list>
+        </mat-grid-tile>
+        <mat-grid-tile rowspan="1" colspan="2">
+          {{dataPokemon?.description}}
+        </mat-grid-tile>
+      </mat-grid-list>
+    </mat-card-content>
+    <button mat-stroked-button (click)="goBack()"> Retour</button>
+  </mat-card>
