@@ -1,6 +1,6 @@
 <mat-card>
     <mat-card-content>
-      <mat-grid-list cols="2" rowHeight="300px">
+      <mat-grid-list cols="2" rowHeight="250px">
         <mat-grid-tile  rowspan="1" colspan="1">
           <img  mat-card-xl-image src="/assets/img/official-artwork/{{dataPokemon?.id}}.png">
           <p>No. {{dataPokemon?.id | number:"3.0-0"}}</p>
@@ -28,4 +28,5 @@
       </mat-grid-list>
     </mat-card-content>
     <button mat-stroked-button (click)="goBack()"> Retour</button>
+    <button mat-stroked-button (click)="ajouterSupprimer(dataPokemon?.id!)">{{etat}}</button>
   </mat-card>
