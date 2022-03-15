@@ -13,16 +13,31 @@ mat-list-item:hover {
   color: rgba(131, 131, 131, 0.055);
 }
 
-
-h1 {
-    font-family: 'Pokemon Solid', sans-serif;
-    font-size: 300%;
-    color: rgb(223, 219, 2);
+mat-form-field {
+  margin-left: 6px;
+  width: 90%;
 }
+
+
+
+.monDresseur {
+  size-adjust: 100;
+}
+
+button {
+  margin-top: 10px;
+  margin-left: 6px;
+  padding: 10px 30px;;
+  object-fit: fill;
+  position: sticky;
+  width: 90%;
+}
+
+
 #title {
-    margin-left: auto;
+    margin-left: 0px;
     margin-right: auto;
-    width: 6em;
+    width: 2em;
     padding: 2em;
 }
 p {

@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -19,8 +20,10 @@ import {RouterModule} from "@angular/router";
     BrowserAnimationsModule,
     PokemonsModule,
     HttpClientModule,
-    RouterModule
+    RouterModule,
+    MatToolbarModule,
   ],
+
   providers: [],
   bootstrap: [AppComponent]
 })

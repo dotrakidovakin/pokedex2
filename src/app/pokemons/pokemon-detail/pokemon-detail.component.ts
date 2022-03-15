@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, Output, EventEmitter } from '@angular/core';
 import {PokemonService} from "../pokemon.service";
 import {ActivatedRoute} from "@angular/router";
 import {Pokemon} from "../model/pokemon";
@@ -9,25 +9,66 @@ import { Location } from '@angular/common';
   templateUrl: './pokemon-detail.component.html',
   styleUrls: ['./pokemon-detail.component.scss']
 })
-export class PokemonDetailComponent implements OnInit {
-  dataPokemon ?: Pokemon;
+export class PokemonDetailComponent implements OnInit, OnChanges {
+
+  @Input() pokeid?: number;
+  @Output() retour = new EventEmitter();
+
+  @Output() idReturn = new EventEmitter<number>();
+
+  @Input() dataPokemon ?: Pokemon;
   constructor(private pokemonService: PokemonService, private route: ActivatedRoute, private location: Location) { }
 
+  etat: string = "Supprimer";
+
   ngOnInit(): void {
-    this.getPokemonFromService();
+    //this.getPokemonFromService();
   }
 
-  private getPokemonFromService():void {
+  ngOnChanges(): void {
+    if(this.pokeid){
+      this.onChange(this.pokeid);
+      if(this.pokemonService.gettxtBtn() === "Mon Equipe") {
+        this.etat = "Ajouter";
+      }
+      else this.etat = "Supprimer";
+    }
+  }
+
+  /*private getPokemonFromService():void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
     this.pokemonService.getPokemon(id).subscribe(data =>{
         this.dataPokemon = data;
         console.log(data);
       }
     )
+  }*/
+
+  public onChange(id : any){
+    this.pokemonService.getPokemon(id).subscribe(data =>{
+      this.dataPokemon = data;
+      //console.log(data);
+    })
   }
 
   goBack(): void {
-    this.location.back();
+    this.retour.emit();
+  }
+
+  /**
+   * Si on est dans le cas d'un ajout de pokemon on appelle directement la méthode dans pokemonservice.
+   * Sinon on renvoie l'id au pokedex qui le transfere à pokemon list. Et on désafiche le pokémon 
+   * @param id 
+   */
+  ajouterSupprimer(id: number) : void {
+    //console.log(this.pokemonService.ajoutSuppressionPokemon([id]));
+    if(this.pokemonService.gettxtBtn() === "Mon Equipe"){
+      this.pokemonService.AjouterPokemon([id]);
+      return;
+    }
+      
+    this.idReturn.emit(id);
+
   }
 
 
