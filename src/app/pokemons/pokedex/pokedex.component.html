@@ -1,7 +1,7 @@
 
 <mat-sidenav-container autosize class="example-container" >
     
-    <mat-sidenav mode="side" opened [disableClose]="true"><app-pokemon-list (newItemEvent)="onChange($event)" [pokeAInclure]="pokeAInclure"></app-pokemon-list></mat-sidenav>
+    <mat-sidenav mode="side" opened [disableClose]="true"><app-pokemon-list (swapDetector)="onswap()" (newItemEvent)="onChange($event)" [pokeAInclure]="pokeAInclure"></app-pokemon-list></mat-sidenav>
     <mat-sidenav-content #sidenav style="height: 88vh;">
         <app-pokemon-detail *ngIf="pokeid" [pokeid]="pokeid" (retour)="onRetour()" (idReturn)="idtochange($event)">
             

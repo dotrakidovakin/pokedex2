@@ -29,18 +29,14 @@ export class PokemonService {
       password : "pierre123"
       }).pipe(
         tap(data => {
-          //console.log(data);
-          
           this.datastruct = data;
           this.access_token = this.datastruct!.access_token;
-          console.log("Nb de pokemon : " + this.nbequipe + " liste des id : " + this.compoEquipe);
         }
       ));
   }
 
   settxtBtn(val : string){
-    this.txtBtn = val;
-    console.log(this.txtBtn as unknown as string)    
+    this.txtBtn = val; 
   }
 
   gettxtBtn() : string {
@@ -49,7 +45,6 @@ export class PokemonService {
 
   setcompoEquipe(tab : number[]){
     this.compoEquipe = tab;
-    console.log(this.compoEquipe);
   }
 
   getcompoEquipe() : number[] {
@@ -58,7 +53,6 @@ export class PokemonService {
 
   setnbEquipe(tab : number){
     this.nbequipe = tab;
-    console.log(this.nbequipe);
   }
   
   getnbEquipe() : number {
@@ -75,10 +69,6 @@ export class PokemonService {
     
     return this.http.get<number[]>(pokemonApiUrl, options).pipe( 
       tap(data => {
-        //console.log("les data : " + data);
-        //this.nbequipe = data.length;
-        //this.compoEquipe = data;
-        //console.log("Nb de pokemon : " + this.nbequipe + " liste des id : " + this.compoEquipe);
       })
     ); 
   }
@@ -89,16 +79,12 @@ export class PokemonService {
       return false;
     }
     else {
-      console.log("La compoTeam avant la tentative de suppresion : " + this.compoEquipe);
-      console.log("Le nbequipe avant : " + this.nbequipe);
       
       const index = this.compoEquipe!.indexOf(id[0], 0);
       if (index > -1) {
       this.compoEquipe!.splice(index, 1);
       }
-      console.log("La compoTeam après la tentative de suppresion : " + this.compoEquipe);
       this.nbequipe!--;
-      console.log("Le nbequipe après : " + this.nbequipe);
       
       return true;
     }
@@ -106,7 +92,6 @@ export class PokemonService {
   }
 
   AjouterPokemon(id : number[]) : Observable<any> {
-    console.log("Il y a x pokemons : x = " + this.nbequipe);
     
     if(this.nbequipe! >=6){
       console.log("Impossible d'ajouter un pokemon l'équipe est pleine");
@@ -154,6 +139,13 @@ export class PokemonService {
   
     getPokemonsOnScroll(offset: number, limit: number): Observable<PagedData<Pokemon>>{
       return this.http.get<PagedData<Pokemon>>(this.pokemonApiUrl+"/pokemons?offset="+offset+"&limit="+limit).pipe(
+        catchError(this.handleError<PagedData<Pokemon>>('getPokemons', {} as PagedData<Pokemon>))
+      )
+    }
+
+    getPokemonsOnScrollSearch(offset: number, limit: number, search : string): Observable<PagedData<Pokemon>>{
+      const pokemonApiUrl = `${this.pokemonApiUrl}/pokemons?search=${search}&offset=${offset}&limit=${limit}`
+      return this.http.get<PagedData<Pokemon>>(pokemonApiUrl).pipe(
         catchError(this.handleError<PagedData<Pokemon>>('getPokemons', {} as PagedData<Pokemon>))
       )
     }

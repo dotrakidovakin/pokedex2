@@ -22,7 +22,6 @@ export class PokemonDetailComponent implements OnInit, OnChanges {
   etat: string = "Supprimer";
 
   ngOnInit(): void {
-    //this.getPokemonFromService();
   }
 
   ngOnChanges(): void {
@@ -35,19 +34,9 @@ export class PokemonDetailComponent implements OnInit, OnChanges {
     }
   }
 
-  /*private getPokemonFromService():void {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
-    this.pokemonService.getPokemon(id).subscribe(data =>{
-        this.dataPokemon = data;
-        console.log(data);
-      }
-    )
-  }*/
-
   public onChange(id : any){
     this.pokemonService.getPokemon(id).subscribe(data =>{
       this.dataPokemon = data;
-      //console.log(data);
     })
   }
 
@@ -61,7 +50,6 @@ export class PokemonDetailComponent implements OnInit, OnChanges {
    * @param id 
    */
   ajouterSupprimer(id: number) : void {
-    //console.log(this.pokemonService.ajoutSuppressionPokemon([id]));
     if(this.pokemonService.gettxtBtn() === "Mon Equipe"){
       this.pokemonService.AjouterPokemon([id]);
       return;
