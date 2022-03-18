@@ -1,14 +1,15 @@
-  <section class = "monDresseur">
+
+<section class = "monDresseur">
     <button mat-raised-button color="primary" (click)="switchMP()">{{txtBtn}}</button>
     <p></p>
   </section>
-  <mat-form-field class="example-full-width" appearance="fill" >
+  <mat-form-field *ngIf="Inpokedex" class="example-full-width" appearance="fill" >
     <mat-label>Chercher un pokemon</mat-label>
-    <textarea matInput placeholder="Pikachu" [ngModel]="listSearch" (ngModelChange)="Newletter($event)"></textarea>
-    <input matInput placeholder="Pikachu" type="Pikachu">
+    <!--<textarea matInput placeholder="Pikachu" [ngModel]="listSearch" (ngModelChange)="Newletter($event)"></textarea>-->
+    <input matInput placeholder="Pikachu" [ngModel]="listSearch" (ngModelChange)="Newletter($event)">
   </mat-form-field>
 
-<mat-list [scrollWindow]="false" infiniteScroll (scrolled)="onScroll()" style="height: 70vh; overflow: auto;" >
+<mat-list [scrollWindow]="false" infiniteScroll (scrolled)="onScroll()" style="height: 65vh; overflow: auto;" >
   <mat-list-item  *ngFor="let pokemon of dataPokemons?.data" (click)="selectPok(pokemon.id)">
     <img matListAvatar style="size: 150%;" src="/assets/img/sprites/{{pokemon?.id}}.png" alt="...">
     <!-- <p matLine routerLink="pokemons/{{pokemon?.id}}"> {{pokemon.id}}: {{pokemon.name}}</p> -->

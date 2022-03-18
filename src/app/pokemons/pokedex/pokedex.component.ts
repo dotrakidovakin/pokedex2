@@ -18,18 +18,16 @@ export class PokedexComponent implements OnInit {
   constructor() { }
 
   onChange(id : any) {
-    console.log(id);
     this.pokeid = id;
-    //this.newItemEvent.emit(id);
+  }
 
-
+  onswap(){
+    this.pokeid = undefined;
   }
 
   idtochange(id : number){
     this.pokeAInclure = id;
     this.pokeid = undefined;
-    console.log("Dans idtochange, id vaut : " + this.pokeAInclure);
-    
   }
 
   onRetour(){
@@ -40,8 +38,6 @@ export class PokedexComponent implements OnInit {
   }
 
   opened(): void {
-    console.log("ok");
-    
   }
 
 }

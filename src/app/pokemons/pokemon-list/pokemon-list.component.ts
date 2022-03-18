@@ -19,7 +19,10 @@ export class PokemonListComponent implements OnInit {
   //nbequipe?: number;
   compoEquipe?: number[];
   txtBtn?: String;
+  Inpokedex?: boolean;
+  saveSearch = "";
 
+  @Output() swapDetector = new EventEmitter<boolean>();
   @Output() newItemEvent = new EventEmitter<number>();
   @Input() pokeAInclure?: number;
 
@@ -28,6 +31,7 @@ export class PokemonListComponent implements OnInit {
   ngOnInit(): void {
     this.txtBtn = "Mon Equipe";
     this.pokemonService.settxtBtn("Mon Equipe");
+    this.Inpokedex = true;
     
     this.getPokemonsFromService();
     this.authconnexion();
@@ -46,13 +50,11 @@ export class PokemonListComponent implements OnInit {
       this.access_token = this.datastruct!.access_token;
       //console.log(this.access_token);
       this.pokemonService.RecupEquipe(this.access_token!).subscribe(data => {
-        console.log(data);
+        //console.log(data);
         this.pokemonService.setnbEquipe(data.length);
         this.pokemonService.setcompoEquipe(data);
         this.compoEquipe = data;
-        console.log("Il y a : " + this.pokemonService.getnbEquipe() + " pokemons dans mon équipe");
         console.log("Il y a les pokemons " + this.pokemonService.getcompoEquipe() + " dans mon équipe");
-        console.log("Le texte du bouton vaut : " + this.pokemonService.gettxtBtn());
           
      })
     })    
@@ -63,7 +65,7 @@ export class PokemonListComponent implements OnInit {
    */
   ngOnChanges(): void {
     if(this.pokeAInclure){
-      console.log("Dans ngonChange, this.pokeAInclure vaut : " + this.pokeAInclure);
+      //console.log("Dans ngonChange, this.pokeAInclure vaut : " + this.pokeAInclure);
       
       this.onChange(this.pokeAInclure);
       this.pokeAInclure = undefined;
@@ -73,7 +75,6 @@ export class PokemonListComponent implements OnInit {
   onChange(idAInclure : number): void {
     let val  = this.pokemonService.gettxtBtn();
     if(val === "Le pokedex"){
-      console.log("on va supprimer le pokemon");
       
       this.pokemonService.supprimerPokemon([idAInclure]);
       this.switchPoke();
@@ -85,8 +86,7 @@ export class PokemonListComponent implements OnInit {
 
   public switchPoke(){
 
-    if(this.pokemonService.compoEquipe!){
-      //console.log("Dans le if de switchPoke");      
+    if(this.pokemonService.compoEquipe!){    
       const pokemonObservable : Observable<Pokemon>[] = this.compoEquipe!.map(id => 
         this.pokemonService.getPokemon(id)
      );     
@@ -94,8 +94,7 @@ export class PokemonListComponent implements OnInit {
       pokemonObservable
     ).pipe(
       map((pokemons) =>  {
-        this.dataPokemonsTeam = pokemons;
-        console.log(this.dataPokemonsTeam);        
+        this.dataPokemonsTeam = pokemons;        
         }
       )
     ).subscribe(() =>
@@ -106,7 +105,7 @@ export class PokemonListComponent implements OnInit {
     
     this.pokemonService.settxtBtn("Le pokedex");
     this.txtBtn = "Le pokedex";
-    
+    this.Inpokedex = false;
   }
 
   public switchTeam(){
@@ -114,6 +113,7 @@ export class PokemonListComponent implements OnInit {
     this.getPokemonsFromService();
     this.pokemonService.settxtBtn("Mon Equipe");
     this.txtBtn = "Mon Equipe";
+    this.Inpokedex = true;
   }
   
   /**
@@ -122,15 +122,14 @@ export class PokemonListComponent implements OnInit {
    * sinon elle appelle la méthode switchTeam 
    */
   public switchMP(){
+    this.swapDetector.emit(true);
     const val = this.pokemonService.gettxtBtn()
-    console.log("get = " + val as unknown as string);
     
     if(val as unknown as string === "Mon Equipe"){
-      console.log("case  1");
       
       this.switchPoke();
     }
-    else {this.switchTeam(); console.log("case  2"); }
+    else {this.switchTeam();}
   }
     
 
@@ -154,15 +153,30 @@ export class PokemonListComponent implements OnInit {
   }
 
   private getPokemonsOnScroll(offset: number, limit: number): void {
-    this.pokemonService.getPokemonsOnScroll(offset,limit).subscribe(data => {
-      this.dataPokemons!.data = this.dataPokemons!.data.concat(data.data);
-      this.dataPokemons!.offset += this.dataPokemons!.limit;
-    })
+    
+    if(this.saveSearch != "" && this.saveSearch != undefined){      
+      
+      this.pokemonService.getPokemonsOnScrollSearch(offset,limit,this.saveSearch!).subscribe(data => {
+        this.dataPokemons!.data = this.dataPokemons!.data.concat(data.data);
+        console.log(this.dataPokemons!.data);
+        
+        this.dataPokemons!.offset += limit;
+        
+      })
+    }
+    else{
+      
+      this.pokemonService.getPokemonsOnScroll(offset,limit).subscribe(data => {
+        this.dataPokemons!.data = this.dataPokemons!.data.concat(data.data);
+        this.dataPokemons!.offset += this.dataPokemons!.limit;
+      })
+    }
+    
 
   }
 
   public Newletter(search : any) : void {
-    console.log(search);
+    this.saveSearch = search;
     if(search == ""){
       this.pokemonService.getPokemons().subscribe(data =>{
         this.dataPokemons = data;
@@ -175,6 +189,7 @@ export class PokemonListComponent implements OnInit {
       this.pokemonService.getSearchPokemon(search).subscribe(
         pokemon => {
           this.dataPokemons = pokemon;
+          this.dataPokemons.offset = this.dataPokemons!.limit;
         }
       )
     }
