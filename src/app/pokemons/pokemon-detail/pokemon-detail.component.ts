@@ -37,6 +37,8 @@ export class PokemonDetailComponent implements OnInit, OnChanges {
   public onChange(id : any){
     this.pokemonService.getPokemon(id).subscribe(data =>{
       this.dataPokemon = data;
+      console.log("123");
+      
     })
   }
 
