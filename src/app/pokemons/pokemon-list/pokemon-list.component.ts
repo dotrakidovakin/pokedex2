@@ -48,13 +48,14 @@ export class PokemonListComponent implements OnInit {
       
       this.datastruct = data;
       this.access_token = this.datastruct!.access_token;
-      //console.log(this.access_token);
+      
+      //On récupére ensuite l'équipe
       this.pokemonService.RecupEquipe(this.access_token!).subscribe(data => {
-        //console.log(data);
+        console.log(data);
         this.pokemonService.setnbEquipe(data.length);
         this.pokemonService.setcompoEquipe(data);
         this.compoEquipe = data;
-        console.log("Il y a les pokemons " + this.pokemonService.getcompoEquipe() + " dans mon équipe");
+        console.log("Il y a les pokemons " + this.pokemonService.getnbEquipe() + " dans mon équipe");
           
      })
     })    
@@ -77,6 +78,7 @@ export class PokemonListComponent implements OnInit {
     if(val === "Le pokedex"){
       
       this.pokemonService.supprimerPokemon([idAInclure]);
+
       this.switchPoke();
       return;
     } 
@@ -86,7 +88,7 @@ export class PokemonListComponent implements OnInit {
 
   public switchPoke(){
 
-    if(this.pokemonService.compoEquipe!){    
+    if(this.pokemonService.compoEquipe && (this.pokemonService.compoEquipe.length >= 1)){    
       const pokemonObservable : Observable<Pokemon>[] = this.compoEquipe!.map(id => 
         this.pokemonService.getPokemon(id)
      );     
@@ -101,7 +103,9 @@ export class PokemonListComponent implements OnInit {
       this.dataPokemons = { data : this.dataPokemonsTeam??[] } as PagedData<Pokemon>
     );
     }
-    else console.log("il y a un pb");
+    else {
+      this.dataPokemons = undefined
+    }
     
     this.pokemonService.settxtBtn("Le pokedex");
     this.txtBtn = "Le pokedex";

@@ -80,35 +80,59 @@ export class PokemonService {
     }
     else {
       
-      const index = this.compoEquipe!.indexOf(id[0], 0);
+      const index = this.compoEquipe!.indexOf(id[0]);
       if (index > -1) {
-      this.compoEquipe!.splice(index, 1);
+        this.compoEquipe!.splice(index, 1);
       }
       this.nbequipe!--;
       
+      const pokemonApiUrl = `${this.pokemonApiUrl}/trainers/me/team`;
+      
+      let headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${this.access_token}`,      
+      });
+
+      let options = { headers: headers };   
+      this.http.put(pokemonApiUrl, this.compoEquipe, options).subscribe(
+        data => {
+          this.RecupEquipe(this.access_token!);
+          console.log("team = " + this.compoEquipe);
+          
+        }
+      )
+      
       return true;
+
     }
 
   }
 
-  AjouterPokemon(id : number[]) : Observable<any> {
+  AjouterPokemon(id : number[]) : void {
     
     if(this.nbequipe! >=6){
       console.log("Impossible d'ajouter un pokemon l'équipe est pleine");
-      alert("L'équipe est déjà pleine !")
-      return of();
+      return;
     }
     
     const pokemonApiUrl = `${this.pokemonApiUrl}/trainers/me/team`;
     let headers = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${this.access_token}`,
-      
+      'Authorization': `Bearer ${this.access_token}`,      
     });
+
     let options = { headers: headers };
-    this.compoEquipe!.push(id[0]);
+    this.compoEquipe?.push(id[0]);
+    console.log(this.compoEquipe)
     this.nbequipe!++;
-    return this.http.put(pokemonApiUrl, this.compoEquipe, options);
+    this.http.put<string>(pokemonApiUrl, this.compoEquipe, options).subscribe(
+      data => {
+        this.RecupEquipe(this.access_token!);
+        console.log("team = " + this.compoEquipe);
+      }
+    );
+
+    return;
     }
     
     public isinlist(id : number): boolean {
